@@ -28,7 +28,7 @@ node{
     }    
     stage('Build the Application'){
         echo "Cleaning... Compiling...Testing... Packaging..."
-        //sh 'mvn clean package' 
+     // sh 'mvn clean package' 
         sh "${mavenCMD} clean package" 
     }
     stage('Publish Test Reports'){
@@ -40,12 +40,12 @@ node{
     }  
     stage('Pushing it to the DockerHub'){
         echo 'Pushing the docker image to DockerHub'
-        withCredentials([string(credentialsId: 'dock-pass', variable: 'dockerHubPassword')]) {
+        withCredentials([string(credentialsId: 'dock-password', variable: 'dockerHubPassword')]) {
         sh "sudo ${dockerCMD} login -u vaibhav3101mankar -p ${dockerHubPassword}"
         sh "sudo ${dockerCMD} push vaibhav3101mankar/banking-finance:${tagName}"    
        }
     }   
     stage('Configure and Deploy to the Test-Server'){
-        ansiblePlaybook become: true, credentialsId: 'ansible-key', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'ansible-playbook.yml'
+        ansiblePlaybook become: true, credentialsId: 'ansible-key', disableHostKeyChecking: true, installation: 'Ansible', inventory: '/etc/ansible/hosts', playbook: 'ansible-playbook.yml'
     }
 }
